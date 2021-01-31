@@ -2,11 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.scss';
 import reportWebVitals from './reportWebVitals';
-import { PostList } from './Posts';
+import { PostList } from './components/Posts';
+import { Navbar } from './components/Navbar';
+import Container from 'react-bootstrap/Container';
 
 ReactDOM.render(
   <React.StrictMode>
+    <Navbar />
+    {/* <Container> */}
     <PostList />
+    {/* </Container> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
