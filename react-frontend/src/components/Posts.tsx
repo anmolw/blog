@@ -6,8 +6,9 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import { Link, useParams } from 'react-router-dom';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 interface PostListState {
     posts: IPost[]
@@ -15,6 +16,19 @@ interface PostListState {
 
 interface PostProps {
     post: IPost
+}
+
+interface SinglePostProps {
+    postId: string
+}
+
+interface SinglePostState {
+    loaded: boolean,
+    post?: IPost
+}
+
+interface SinglePostFromURLParams {
+    id: string
 }
 
 function AbbreviatedPost(props: PostProps) {
@@ -28,8 +42,8 @@ function AbbreviatedPost(props: PostProps) {
     );
 }
 
-function truncatePost(body: String) {
-
+function truncatePost(body: string): string {
+    return (body.trimEnd().length <= 500 ? body : body.trimEnd().substr(0, 500) + "...");
 }
 
 function PostCard(props: PostProps) {
@@ -37,9 +51,9 @@ function PostCard(props: PostProps) {
         <Card className="mb-2">
             <Card.Body>
                 <Card.Title>{props.post.title}</Card.Title>
-                <Card.Text>{props.post.body}</Card.Text>
+                <Card.Text>{truncatePost(props.post.body)}</Card.Text>
                 <div className="d-flex flex-row-reverse">
-                    <Button variant="primary">Read More</Button>
+                    <Button variant="link" as={Link} to={`/posts/${props.post._id}`}>Continue Reading</Button>
                 </div>
             </Card.Body>
         </Card>
@@ -67,11 +81,45 @@ export class PostList extends React.Component<{}, PostListState> {
     render() {
         const posts = this.state.posts.map(post => <PostCard post={post} key={post._id} />);
         return (
-            // <div>
             <Container style={{ marginTop: "4rem" }}>
                 {posts}
             </Container>
-            // </div>
         );
     };
+}
+
+export function SinglePostFromURL() {
+    let { id } = useParams<SinglePostFromURLParams>();
+    return (
+        <SinglePost postId={id} />
+    );
+}
+
+export class SinglePost extends React.Component<SinglePostProps, SinglePostState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            loaded: false,
+        }
+    }
+    componentDidMount() {
+        const req = axios.get(`${BASE_URL}/posts/${this.props.postId}`).then((response) => {
+            this.setState({
+                post: response.data,
+                loaded: true
+            });
+        }, (error) => {
+            console.error(error);
+        });
+    }
+    render() {
+        const loaded = this.state.loaded;
+        const post = this.state.post;
+        return (
+            <Container style={{ marginTop: "4rem" }}>
+                <h4>{post?.title ?? ''}</h4>
+                <p>{post?.body ?? ''}</p>
+            </Container>
+        );
+    }
 }
