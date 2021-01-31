@@ -3,7 +3,6 @@ import { IPost } from '../../interfaces/post'
 const PostSchema = new mongoose.Schema({
     title: { type: String },
     author: { type: String },
-    id: { type: Number },
     // coverImage: string,
     body: { type: String },
     date: { type: Date, default: Date.now }
