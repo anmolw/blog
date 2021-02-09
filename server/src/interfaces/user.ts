@@ -1,7 +1,7 @@
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 
 export interface IUser extends mongoose.Document {
     email: string,
     username: string,
-    passwordHash: string
+    password: string
 }

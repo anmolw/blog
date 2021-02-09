@@ -1,9 +1,12 @@
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import express = require('express')
 import cors = require('cors')
 import 'path'
+import passport from 'passport'
 import postsRouter from './routes/posts'
 import usersRouter from './routes/auth'
+import registerRouter from './routes/register'
+import authStrategy from './lib/AuthStrategy'
 
 const app = express()
 const port = 3000
@@ -25,6 +28,9 @@ app.use(express.urlencoded({ extended: false }))
 // Enable cross-origin resource sharing
 app.use(cors())
 
+passport.use(authStrategy)
+
 // Register routers
 app.use('/posts', postsRouter)
 app.use('/auth', usersRouter)
+app.use('/register', registerRouter)

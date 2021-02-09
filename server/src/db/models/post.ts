@@ -1,5 +1,6 @@
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { IPost } from '../../interfaces/post'
+
 const PostSchema = new mongoose.Schema({
     title: { type: String },
     author: { type: String },

@@ -1,5 +1,5 @@
 import express = require('express')
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { Post } from '../db/models/post'
 import { IPost } from '../interfaces/post'
 
