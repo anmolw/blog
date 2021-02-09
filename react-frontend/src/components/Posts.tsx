@@ -57,7 +57,7 @@ function PostCard(props: PostProps) {
                 </div>
             </Card.Body>
         </Card>
-    )
+    );
 }
 
 export class PostList extends React.Component<{}, PostListState> {
@@ -69,7 +69,7 @@ export class PostList extends React.Component<{}, PostListState> {
     }
     componentDidMount() {
         let posts: IPost[];
-        const req = axios.get(`${BASE_URL}/posts`).then((result) => {
+        axios.get(`${BASE_URL}/posts`).then((result) => {
             posts = result.data;
             this.setState({
                 posts: posts,
@@ -103,7 +103,7 @@ export class SinglePost extends React.Component<SinglePostProps, SinglePostState
         }
     }
     componentDidMount() {
-        const req = axios.get(`${BASE_URL}/posts/${this.props.postId}`).then((response) => {
+        axios.get(`${BASE_URL}/posts/${this.props.postId}`).then((response) => {
             this.setState({
                 post: response.data,
                 loaded: true
@@ -113,7 +113,6 @@ export class SinglePost extends React.Component<SinglePostProps, SinglePostState
         });
     }
     render() {
-        const loaded = this.state.loaded;
         const post = this.state.post;
         return (
             <Container style={{ marginTop: "4rem" }}>
